@@ -28,7 +28,7 @@ class FormArea extends React.Component{
       <form className='form-inline'>
           <div class="form-group">
           <input value = {value} class="form-control" onChange={this.handleChange} placeholder='TODO'/>
-          <button type='submit' class="btn btn-primary" onClick={this.handleClick}>
+          <button type='submit' class="btn btn-primary sr-only" onClick={this.handleClick}>
             ADD
           </button>
           </div>
