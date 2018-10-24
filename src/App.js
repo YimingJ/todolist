@@ -97,7 +97,24 @@ class AppTodos extends React.Component{
   }
 }
 class AppFooter extends React.Component{
-  
+  handleNotComplete(){
+    this.props.OnNotComplete();
+  }
+  handleComplete(){
+    this.props.OnComplete();
+  }
+  render(){
+    return(
+      <div>
+        <button type='submit' onClick={this.handleNotComplete.bind(this)}>
+            not complete
+          </button>
+          <button type='submit' onClick={this.handleComplete.bind(this)}>
+            completed
+          </button>
+      </div>
+    )
+  }
 }
 class App extends React.Component {
   state = {
@@ -138,14 +155,7 @@ class App extends React.Component {
         </header>
         <FormArea AddTodoItem = {this.OnAddTodoItem.bind(this)} count={this.state.count} CountChange={this.OnCountChange.bind(this)} />
         <ListArea data = {data} DeleteItem={this.OnDelete.bind(this)} choosevalue={this.state.choosevalue}/>
-        <footer >
-          <button type='submit' onClick={this.handleNotComplete.bind(this)}>
-            not complete
-          </button>
-          <button type='submit' onClick={this.handleComplete.bind(this)}>
-            completed
-          </button>
-          </footer>
+        <AppFooter choosevalue={this.state.choosevalue} OnNotComplete = {this.handleNotComplete.bind(this)} OnComplete={this.handleComplete.bind(this)}/>
       </div>
     );
   }
