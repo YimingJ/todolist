@@ -3,6 +3,8 @@ class FormArea extends React.Component{
   constructor(props){
     super(props);
     this.state = {value:'',};
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
   handleChange(e){
     this.setState({value:e.target.value})
@@ -23,8 +25,8 @@ class FormArea extends React.Component{
     const value = this.state.value;
     return(
       <form className='form'>
-          <input value = {value} onChange={this.handleChange.bind(this)} placeholder='TODO'/>
-          <button type='submit' className='button' onClick={this.handleClick.bind(this)}>
+          <input value = {value} onChange={this.handleChange} placeholder='TODO'/>
+          <button type='submit' className='button' onClick={this.handleClick}>
             Add
           </button>
       </form>
@@ -33,6 +35,10 @@ class FormArea extends React.Component{
 }
 
 class ListArea extends React.Component{
+  constructor(props){
+    super(props);
+    this.DeleteMe = this.DeleteMe.bind(this);
+  }
   DeleteMe(id){
     this.props.DeleteItem(id);
   }
@@ -45,7 +51,7 @@ class ListArea extends React.Component{
                key={index} 
                id={id} 
                text={text} 
-               OnDelete={this.DeleteMe.bind(this)}
+               OnDelete={this.DeleteMe}
              />
        )
       }if(chooseValue===2 && complete===true){
@@ -54,7 +60,7 @@ class ListArea extends React.Component{
                 key={index} 
                 id={id} 
                 text={text} 
-                OnDelete={this.DeleteMe.bind(this)}
+                OnDelete={this.DeleteMe}
               />
         )
        }else {
@@ -69,6 +75,10 @@ class ListArea extends React.Component{
 }
 
 class AppTodos extends React.Component{
+  constructor(props){
+    super(props);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
   handleDelete(){
     let id = this.props.id;
     this.props.OnDelete(id);
@@ -88,7 +98,7 @@ class AppTodos extends React.Component{
           </span>
           <span className='ui blue button'
                 // style={styles.delete} 
-                onClick={this.handleDelete.bind(this)}>
+                onClick={this.handleDelete}>
                 completed
           </span>
         </div>
@@ -97,6 +107,11 @@ class AppTodos extends React.Component{
   }
 }
 class AppFooter extends React.Component{
+  constructor(props){
+    super(props);
+    this.handleNotComplete = this.handleNotComplete.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
+  }
   handleNotComplete(){
     this.props.OnNotComplete();
   }
@@ -106,10 +121,10 @@ class AppFooter extends React.Component{
   render(){
     return(
       <div>
-        <button type='submit' onClick={this.handleNotComplete.bind(this)}>
+        <button type='submit' onClick={this.handleNotComplete}>
             not complete
           </button>
-          <button type='submit' onClick={this.handleComplete.bind(this)}>
+          <button type='submit' onClick={this.handleComplete}>
             completed
           </button>
       </div>
@@ -117,6 +132,14 @@ class AppFooter extends React.Component{
   }
 }
 class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.handleComplete=this.handleComplete.bind(this);
+    this.handleNotComplete=this.handleNotComplete.bind(this);
+    this.OnAddTodoItem = this.OnAddTodoItem.bind(this);
+    this.OnCountChange = this.OnCountChange.bind(this);
+    this.OnDelete = this.OnDelete.bind(this);
+  }
   state = {
     choosevalue : 1,
     data: this.props.data,
@@ -153,9 +176,9 @@ class App extends React.Component {
         <header className="header">
           My TODO list with React
         </header>
-        <FormArea AddTodoItem = {this.OnAddTodoItem.bind(this)} count={this.state.count} CountChange={this.OnCountChange.bind(this)} />
-        <ListArea data = {data} DeleteItem={this.OnDelete.bind(this)} choosevalue={this.state.choosevalue}/>
-        <AppFooter choosevalue={this.state.choosevalue} OnNotComplete = {this.handleNotComplete.bind(this)} OnComplete={this.handleComplete.bind(this)}/>
+        <FormArea AddTodoItem = {this.OnAddTodoItem} count={this.state.count} CountChange={this.OnCountChange} />
+        <ListArea data = {data} DeleteItem={this.OnDelete} choosevalue={this.state.choosevalue}/>
+        <AppFooter choosevalue={this.state.choosevalue} OnNotComplete = {this.handleNotComplete} OnComplete={this.handleComplete}/>
       </div>
     );
   }
