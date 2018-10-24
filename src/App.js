@@ -37,8 +37,9 @@ class ListArea extends React.Component{
     this.props.DeleteItem(id);
   }
   render () { 
+    let chooseValue = this.props.choosevalue;
     const a = this.props.data.map(({ id, text,complete}, index) => {
-      if(!complete){
+      if(chooseValue===1 && complete===false){
        return(  
            <AppTodos 
                key={index} 
@@ -47,7 +48,16 @@ class ListArea extends React.Component{
                OnDelete={this.DeleteMe.bind(this)}
              />
        )
-      }else {
+      }if(chooseValue===2 && complete===true){
+        return(  
+            <AppTodos 
+                key={index} 
+                id={id} 
+                text={text} 
+                OnDelete={this.DeleteMe.bind(this)}
+              />
+        )
+       }else {
         return null;
       }
     })
@@ -86,7 +96,9 @@ class AppTodos extends React.Component{
     )
   }
 }
-
+class AppFooter extends React.Component{
+  
+}
 class App extends React.Component {
   state = {
     choosevalue : 1,
@@ -112,10 +124,10 @@ class App extends React.Component {
     this.setState({data:newData});
   }
   handleNotComplete(){
-
+    this.setState({choosevalue:1});
   }
   handleComplete(){
-
+    this.setState({choosevalue:2});
   }
   render() {
     const { data } = this.state;
@@ -125,15 +137,15 @@ class App extends React.Component {
           My TODO list with React
         </header>
         <FormArea AddTodoItem = {this.OnAddTodoItem.bind(this)} count={this.state.count} CountChange={this.OnCountChange.bind(this)} />
-        <ListArea data = {data} DeleteItem={this.OnDelete.bind(this)}/>
-        <footer>
+        <ListArea data = {data} DeleteItem={this.OnDelete.bind(this)} choosevalue={this.state.choosevalue}/>
+        <footer >
           <button type='submit' onClick={this.handleNotComplete.bind(this)}>
             not complete
           </button>
           <button type='submit' onClick={this.handleComplete.bind(this)}>
             completed
           </button>
-        </footer>
+          </footer>
       </div>
     );
   }
