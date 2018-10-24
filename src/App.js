@@ -37,10 +37,14 @@ class FormArea extends React.Component{
 class ListArea extends React.Component{
   constructor(props){
     super(props);
+    this.CompleteMe = this.CompleteMe.bind(this);
     this.DeleteMe = this.DeleteMe.bind(this);
   }
   DeleteMe(id){
     this.props.DeleteItem(id);
+  }
+  CompleteMe(id){
+    this.props.CompleteItem(id);
   }
   render () { 
     let chooseValue = this.props.choosevalue;
@@ -51,7 +55,9 @@ class ListArea extends React.Component{
                key={index} 
                id={id} 
                text={text} 
+               OnComplete={this.CompleteMe}
                OnDelete={this.DeleteMe}
+               chooseValue = {chooseValue}
              />
        )
       }if(chooseValue===2 && complete===true){
@@ -60,7 +66,9 @@ class ListArea extends React.Component{
                 key={index} 
                 id={id} 
                 text={text} 
+                OnComplete={this.CompleteMe}
                 OnDelete={this.DeleteMe}
+                chooseValue = {chooseValue}
               />
         )
        }else {
@@ -78,12 +86,34 @@ class AppTodos extends React.Component{
   constructor(props){
     super(props);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
+    this.handletodo = this.handletodo.bind(this);
+  }
+  handletodo(){
+    //todo
   }
   handleDelete(){
+    this.props.OnDelete(this.props.id);
+  }
+  handleComplete(){
     let id = this.props.id;
-    this.props.OnDelete(id);
+    this.props.OnComplete(id);
   }
   render(){
+    let span = null;
+    if(this.props.chooseValue===1){
+      span = <span className='ui blue button'
+      // style={styles.delete} 
+      onClick={this.handleComplete}>
+      completed
+</span>
+    }else{
+      span = <span className='ui blue button'
+      // style={styles.delete} 
+      onClick={this.handletodo}>
+      todo
+</span>
+    }
     return(
       <div className='comment'>
         <div className='content'>
@@ -96,10 +126,11 @@ class AppTodos extends React.Component{
                    className={this.props.complete ? 'line' : ''} 
               /> */}
           </span>
+         {span}
           <span className='ui blue button'
                 // style={styles.delete} 
                 onClick={this.handleDelete}>
-                completed
+                delete
           </span>
         </div>
       </div>
@@ -139,6 +170,7 @@ class App extends React.Component {
     this.OnAddTodoItem = this.OnAddTodoItem.bind(this);
     this.OnCountChange = this.OnCountChange.bind(this);
     this.OnDelete = this.OnDelete.bind(this);
+    this.Complete = this.Complete.bind(this);
   }
   state = {
     choosevalue : 1,
@@ -155,6 +187,15 @@ class App extends React.Component {
     this.setState({count:newCount});
   }
   OnDelete(id){
+    let newData = this.state.data.slice();
+    for(let i =0;i<newData.length;i++){
+      if(newData[i].id===id){
+        newData.splice(i,1);
+      }
+    }
+    this.setState({data:newData});
+  }
+  Complete(id){
     let newData = this.state.data.map((item)=>{
       if(item.id===id){
         item.complete=true
@@ -174,10 +215,10 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="header">
-          My TODO list with React
+          My TODO List
         </header>
         <FormArea AddTodoItem = {this.OnAddTodoItem} count={this.state.count} CountChange={this.OnCountChange} />
-        <ListArea data = {data} DeleteItem={this.OnDelete} choosevalue={this.state.choosevalue}/>
+        <ListArea data = {data} DeleteItem={this.OnDelete} CompleteItem={this.Complete} choosevalue={this.state.choosevalue}/>
         <AppFooter choosevalue={this.state.choosevalue} OnNotComplete = {this.handleNotComplete} OnComplete={this.handleComplete}/>
       </div>
     );
