@@ -1,4 +1,5 @@
 import React from 'react';
+
 class FormArea extends React.Component{
   constructor(props){
     super(props);
@@ -106,23 +107,25 @@ class AppTodos extends React.Component{
     this.props.OnComplete(id);
   }
   render(){
-    let span = null;
+    let btn = null;
     if(this.props.chooseValue===1){
-      span = <span className='ui blue button'
+      btn = <button className='ui blue button'
       // style={styles.delete} 
       onClick={this.handleComplete}>
       COMPLETED
-</span>
+</button>
     }else{
-      span = <span className='ui blue button'
+      btn = <button className='ui blue button'
       // style={styles.delete} 
       onClick={this.handletodo}>
       TODO
-</span>
+</button>
     }
     return(
+      
       <div className='comment'>
         <div className='content'>
+        <hr></hr>
           <span 
                className='author' 
                 // style={styles.title} 
@@ -132,12 +135,12 @@ class AppTodos extends React.Component{
                    className={this.props.complete ? 'line' : ''} 
               /> */}
           </span>
-         {span}
-          <span className='ui blue button'
+         {btn}
+          <button className='ui blue button'
                 // style={styles.delete} 
                 onClick={this.handleDelete}>
                 DELETE
-          </span>
+          </button>
         </div>
       </div>
     )
@@ -158,11 +161,12 @@ class AppFooter extends React.Component{
   render(){
     return(
       <div>
+        <hr></hr>
         <button type='submit' onClick={this.handleNotComplete}>
-            TODO
+            TODO List
           </button>
           <button type='submit' onClick={this.handleComplete}>
-            COMPLETED
+            COMPLETED List
           </button>
       </div>
     )
@@ -179,19 +183,22 @@ class App extends React.Component {
     this.Complete = this.Complete.bind(this);
     this.backTodo = this.backTodo.bind(this);
   }
+  
   state = {
     choosevalue : 1,
     data: this.props.data,
-    count:1,
+    count:this.props.count,
   }
   OnAddTodoItem(newItem){
     let newData = this.state.data.concat(newItem);
     // console.log(newData);
     this.setState({data : newData});
+    localStorage.setItem("data",JSON.stringify(newData));
   }
   OnCountChange(count){
     let newCount = count+1;
     this.setState({count:newCount});
+    localStorage.setItem("count",newCount);
   }
   OnDelete(id){
     let newData = this.state.data.slice();
@@ -201,6 +208,7 @@ class App extends React.Component {
       }
     }
     this.setState({data:newData});
+    localStorage.setItem("data",JSON.stringify(newData));
   }
   backTodo(id){
     let newData = this.state.data.map((item)=>{
@@ -210,6 +218,7 @@ class App extends React.Component {
       return item;
     })
     this.setState({data:newData});
+    localStorage.setItem("data",JSON.stringify(newData));
   }
   Complete(id){
     let newData = this.state.data.map((item)=>{
@@ -219,6 +228,7 @@ class App extends React.Component {
       return item;
     })
     this.setState({data:newData});
+    localStorage.setItem("data",JSON.stringify(newData));
   }
   handleNotComplete(){
     this.setState({choosevalue:1});
@@ -228,6 +238,7 @@ class App extends React.Component {
   }
   render() {
     const { data } = this.state;
+    console.log(data);
     return (
       <div className="container">
         <header className="header">
