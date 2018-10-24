@@ -25,11 +25,13 @@ class FormArea extends React.Component{
   render(){
     const value = this.state.value;
     return(
-      <form className='form'>
-          <input value = {value} onChange={this.handleChange} placeholder='TODO'/>
-          <button type='submit' className='button' onClick={this.handleClick}>
+      <form className='form-inline'>
+          <div class="form-group">
+          <input value = {value} class="form-control" onChange={this.handleChange} placeholder='TODO'/>
+          <button type='submit' class="btn btn-primary" onClick={this.handleClick}>
             ADD
           </button>
+          </div>
       </form>
     )
   }
@@ -109,13 +111,13 @@ class AppTodos extends React.Component{
   render(){
     let btn = null;
     if(this.props.chooseValue===1){
-      btn = <button className='ui blue button'
+      btn = <button class="btn btn-success"
       // style={styles.delete} 
       onClick={this.handleComplete}>
       COMPLETED
 </button>
     }else{
-      btn = <button className='ui blue button'
+      btn = <button class="btn btn-info"
       // style={styles.delete} 
       onClick={this.handletodo}>
       TODO
@@ -127,7 +129,7 @@ class AppTodos extends React.Component{
         <div className='content'>
         <hr></hr>
           <span 
-               className='author' 
+               class = "text-muted"
                 // style={styles.title} 
           >
               {this.props.text}
@@ -136,7 +138,7 @@ class AppTodos extends React.Component{
               /> */}
           </span>
          {btn}
-          <button className='ui blue button'
+          <button class="btn btn-danger"
                 // style={styles.delete} 
                 onClick={this.handleDelete}>
                 DELETE
@@ -162,10 +164,10 @@ class AppFooter extends React.Component{
     return(
       <div>
         <hr></hr>
-        <button type='submit' onClick={this.handleNotComplete}>
+        <button type='submit' onClick={this.handleNotComplete} class="btn btn-primary">
             TODO List
           </button>
-          <button type='submit' onClick={this.handleComplete}>
+          <button type='submit' onClick={this.handleComplete} class="btn btn-primary">
             COMPLETED List
           </button>
       </div>
@@ -242,8 +244,9 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="header">
-          My TODO List
+          <h2 class="text-primary">My TODO List</h2>
         </header>
+        
         <FormArea AddTodoItem = {this.OnAddTodoItem} count={this.state.count} CountChange={this.OnCountChange} />
         <ListArea data = {data} backTodoTop={this.backTodo} DeleteItem={this.OnDelete} CompleteItem={this.Complete} choosevalue={this.state.choosevalue}/>
         <AppFooter choosevalue={this.state.choosevalue} OnNotComplete = {this.handleNotComplete} OnComplete={this.handleComplete}/>
