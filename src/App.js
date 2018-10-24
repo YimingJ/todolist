@@ -1,25 +1,139 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+class FormArea extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {value:'',};
+  }
+  handleChange(e){
+    this.setState({value:e.target.value})
+  }
+  handleClick(e){
+    e.preventDefault();
+    let text = this.state.value;
+    if(!text.trim()){
+      alert('input cannot be null')
+      return
+    }
+    let id = this.props.count;
+    this.setState({value:''});
+    this.props.AddTodoItem({id,text,complete:false});
+    this.props.CountChange(id);
+  }
+  render(){
+    const value = this.state.value;
+    return(
+      <form className='form'>
+          <input value = {value} onChange={this.handleChange.bind(this)} placeholder='TODO'/>
+          <button type='submit' className='button' onClick={this.handleClick.bind(this)}>
+            Add
+          </button>
+      </form>
+    )
+  }
+}
 
-class App extends Component {
-  render() {
+class ListArea extends React.Component{
+  DeleteMe(id){
+    this.props.DeleteItem(id);
+  }
+  render () { 
+    const a = this.props.data.map(({ id, text,complete}, index) => {
+      if(!complete){
+       return(  
+           <AppTodos 
+               key={index} 
+               id={id} 
+               text={text} 
+               OnDelete={this.DeleteMe.bind(this)}
+             />
+       )
+      }else {
+        return null;
+      }
+    })
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div> { a } </div>
+    )
+  }
+}
+
+class AppTodos extends React.Component{
+  handleDelete(){
+    let id = this.props.id;
+    this.props.OnDelete(id);
+  }
+  render(){
+    return(
+      <div className='comment'>
+        <div className='content'>
+          <span 
+               className='author' 
+                // style={styles.title} 
           >
-            Learn React
-          </a>
+              {this.props.text}
+              {/* <span 
+                   className={this.props.complete ? 'line' : ''} 
+              /> */}
+          </span>
+          <span className='ui blue button'
+                // style={styles.delete} 
+                onClick={this.handleDelete.bind(this)}>
+                completed
+          </span>
+        </div>
+      </div>
+    )
+  }
+}
+
+class App extends React.Component {
+  state = {
+    choosevalue : 1,
+    data: this.props.data,
+    count:1,
+  }
+  OnAddTodoItem(newItem){
+    let newData = this.state.data.concat(newItem);
+    // console.log(newData);
+    this.setState({data : newData});
+  }
+  OnCountChange(count){
+    let newCount = count+1;
+    this.setState({count:newCount});
+  }
+  OnDelete(id){
+    let newData = this.state.data.map((item)=>{
+      if(item.id===id){
+        item.complete=true
+      }
+      return item;
+    })
+    this.setState({data:newData});
+  }
+  handleNotComplete(){
+
+  }
+  handleComplete(){
+
+  }
+  render() {
+    const { data } = this.state;
+    return (
+      <div className="container">
+        <header className="header">
+          My TODO list with React
         </header>
+        <FormArea AddTodoItem = {this.OnAddTodoItem.bind(this)} count={this.state.count} CountChange={this.OnCountChange.bind(this)} />
+        <ListArea data = {data} DeleteItem={this.OnDelete.bind(this)}/>
+        <footer>
+          <button type='submit' onClick={this.handleNotComplete.bind(this)}>
+            not complete
+          </button>
+          <button type='submit' onClick={this.handleComplete.bind(this)}>
+            completed
+          </button>
+        </footer>
       </div>
     );
   }
