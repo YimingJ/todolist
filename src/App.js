@@ -37,6 +37,7 @@ class FormArea extends React.Component{
   }
 }
 
+
 class ListArea extends React.Component{
   constructor(props){
     super(props);
@@ -90,7 +91,27 @@ class ListArea extends React.Component{
     )
   }
 }
-
+let style = {
+  'text':{
+    overflow:'hidden',
+    textOverflow:'ellipsis'
+  },
+  'parent':{
+    display:'flex',
+    flexWrap:'nowrap'
+  },
+  'children':{
+    marginLeft:'auto',
+    display:'flex',
+    
+  },
+  'footer':{
+    display:'flex',
+  },
+  'right':{
+    marginLeft:'1rem'
+  }
+}
 class AppTodos extends React.Component{
   constructor(props){
     super(props);
@@ -112,13 +133,13 @@ class AppTodos extends React.Component{
     let btn = null;
     if(this.props.chooseValue===1){
       btn = <button class="btn btn-success"
-      // style={styles.delete} 
+      //style={style.children} 
       onClick={this.handleComplete}>
       COMPLETED
 </button>
     }else{
       btn = <button class="btn btn-info"
-      // style={styles.delete} 
+      //style={style.children} 
       onClick={this.handletodo}>
       TODO
 </button>
@@ -128,21 +149,18 @@ class AppTodos extends React.Component{
       <div className='comment'>
         <div className='content'>
         <hr></hr>
-          <span 
-               class = "text-muted"
-                // style={styles.title} 
-          >
-              {this.props.text}
-              {/* <span 
-                   className={this.props.complete ? 'line' : ''} 
-              /> */}
-          </span>
-         {btn}
+        <div style={style.parent}>
+          <span class = "text-muted" style={style.text}>{this.props.text}</span>
+          <div style={style.children}>
+          {btn}
           <button class="btn btn-danger"
                 // style={styles.delete} 
                 onClick={this.handleDelete}>
                 DELETE
           </button>
+          </div>
+        </div>
+        
         </div>
       </div>
     )
@@ -162,14 +180,16 @@ class AppFooter extends React.Component{
   }
   render(){
     return(
-      <div>
+      <div >
         <hr></hr>
-        <button type='submit' onClick={this.handleNotComplete} class="btn btn-primary">
+        <div style={style.footer}>
+        <button type='submit' onClick={this.handleNotComplete} class="btn btn-raised btn-primary">
             TODO List
           </button>
-          <button type='submit' onClick={this.handleComplete} class="btn btn-primary">
+          <button type='submit' onClick={this.handleComplete} class="btn btn-raised btn-primary" style={style.right}>
             COMPLETED List
           </button>
+          </div>
       </div>
     )
   }
